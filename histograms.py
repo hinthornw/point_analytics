@@ -1,7 +1,8 @@
 import collections
+import importlib
 import matplotlib.pyplot as plt
 import numpy as np
-import analytics.utils as utils
+importlib.import_module('.utils', 'point_analytics')
 
 __all__ = [
     "count_part_freq",

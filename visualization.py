@@ -1,6 +1,8 @@
-import analytics.utils as utils
+import importlib
 from PIL import ImageDraw
 from PIL import ImageFont
+importlib.import_module('.utils', 'point_analytics')
+importlib.import_module('.visualization', 'point_analytics')
 
 
 def drawPoint(im, y, x):

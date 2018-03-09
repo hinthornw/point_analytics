@@ -2,9 +2,9 @@
 based on centroids of part masks'''
 import collections
 import skimage.measure
+import importlib
 import numpy as np
-import analytics.utils as utils
-# import analytics.point_distances as point_distances
+importlib.import_module('.utils', 'point_analytics')
 
 __all__ = [
     "select_unambiguous_parts",

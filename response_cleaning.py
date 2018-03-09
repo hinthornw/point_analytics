@@ -1,9 +1,15 @@
+'''
+This module contains functions to clean raw data returned from Mturk, 
+reorganize to be indexed by object, etc., as well as other functions.
+
+'''
 import collections
 import numpy as np
-import analytics.utils as utils
-import analytics.visualization as visualization
+import importlib
 from skimage.morphology import medial_axis
 from PIL import Image
+importlib.import_module('.utils', 'point_analytics')
+importlib.import_module('.visualization', 'point_analytics')
 
 __all__ = [
     "point2annid",
