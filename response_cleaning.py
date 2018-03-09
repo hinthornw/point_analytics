@@ -1,13 +1,14 @@
 '''
-This module contains functions to clean raw data returned from Mturk, 
+This module contains functions to clean raw data returned from Mturk,
 reorganize to be indexed by object, etc., as well as other functions.
 
 '''
 import collections
-import numpy as np
 import importlib
+import numpy as np
 from skimage.morphology import medial_axis
 from PIL import Image
+import point_analytics
 importlib.import_module('.utils', 'point_analytics')
 importlib.import_module('.visualization', 'point_analytics')
 
@@ -28,8 +29,8 @@ def na2numeric(responses, to='-1'):
             ans = frame[key]['answer']
             if ans == 'NA':
                 frame[key]['answer'] = str(to)
-    f = utils.bake_function(convert_na, to=to)
-    utils.map2each_answer(responses, f)
+    f = point_analytics.utils.bake_function(convert_na, to=to)
+    point_analytics.utils.map2each_answer(responses, f)
 
 
 def get_keys_certain(
@@ -41,7 +42,7 @@ def get_keys_certain(
     assert(which in ['either', 'both', 'part', 'obj'])
     uncertain_keys = {}
     for k, hist in answers_by_key.items():
-        keydat = utils.separate_key(k)
+        keydat = point_analytics.utils.separate_key(k)
         obj_id = int(keydat['obj_id'])
         part_id = int(keydat['part_id'])
         obj_ref = hist[obj_id] if obj_id in hist else 0
@@ -138,7 +139,7 @@ def key2annid(key, details):
     Note that error checking is hacky and only
     looks for points which are out of bounds.
     '''
-    keydat = utils.separate_key(key)
+    keydat = point_analytics.utils.separate_key(key)
     category_id = int(keydat['obj_id'])
     pid = int(keydat['part_id'])
     x, y = int(keydat['xCoord']), int(keydat['yCoord'])
@@ -259,7 +260,8 @@ def point2annid(question, details, D, dInfo, r=3, update=False):
 def responses_by_object(responses):
     data = collections.defaultdict(list)
     for response in responses:
-        vals = utils.separate_key(list(response['output'][0])[0])
+        vals = point_analytics.utils.separate_key(
+            list(response['output'][0])[0])
         obj = vals['obj_id']
         data[obj].append(response)
     return dict(data)
@@ -285,7 +287,7 @@ def collect_info_from_keys(response, dInfo):
     output = response['output']
     for frame in output:
         for k in list(frame):
-            dInfo[k] = utils.separate_key(k)
+            dInfo[k] = point_analytics.utils.separate_key(k)
 
 
 def collect_all_key_info(responses):
@@ -407,7 +409,7 @@ def get_nearest_cls(mask, point, r=5, debug=False):
             mask2[mask2 == uniques[i]] = float(i)
         mask2 = (mask2 / mask2.max() * 255.0).astype(np.uint8)
         im = Image.fromarray(mask2)
-        im = visualization.drawPoint(im, point[0], point[1])
+        im = point_analytics.visualization.drawPoint(im, point[0], point[1])
         # from pylab import cm
         # cmap = cm.datad['Paired']
         # plt.imshow(im, cmap='tab20')

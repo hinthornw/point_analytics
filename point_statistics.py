@@ -1,9 +1,10 @@
 '''This module provides functions to compute statistics
 based on centroids of part masks'''
 import collections
-import skimage.measure
 import importlib
+import skimage.measure
 import numpy as np
+import point_analytics
 importlib.import_module('.utils', 'point_analytics')
 
 __all__ = [
@@ -53,7 +54,7 @@ def add_contrarian_response(question, within_set, contrarian, common, dInfo):
     '''
     keys = list(question)
     for key in keys:
-        key_data = utils.separate_key(key)
+        key_data = point_analytics.utils.separate_key(key)
         obj = key_data['obj_id']
         part = dInfo[key]['nearest_part_id']
         if obj not in contrarian:

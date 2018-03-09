@@ -1,6 +1,7 @@
 import importlib
 from PIL import ImageDraw
 from PIL import ImageFont
+import point_analytics
 importlib.import_module('.utils', 'point_analytics')
 importlib.import_module('.visualization', 'point_analytics')
 
@@ -25,8 +26,8 @@ def get_ims_for_review(data, label=True):
         import json
     images = []
     for key, info in data.items():
-        keydat = utils.separate_key(key)
-        img = utils.get_im_from_s3(keydat['imid'])
+        keydat = point_analytics.utils.separate_key(key)
+        img = point_analytics.utils.get_im_from_s3(keydat['imid'])
         img = drawPoint(img, int(keydat['yCoord']), int(keydat['xCoord']))
         if label:
             txt = json.dumps(info)
